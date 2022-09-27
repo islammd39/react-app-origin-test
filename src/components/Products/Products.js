@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Cart from '../Cart/Cart';
 import Shopping from '../Shopping/Shopping';
 import './Products.css'
+import {addToDb, getLocalSd} from '../../utilities/fakedb'
 const Products = () => {
     const [products,setProduct] = useState([])
     const [cart,setCart] = useState([])
@@ -10,10 +11,19 @@ const Products = () => {
         .then(res=> res.json())
         .then(data => setProduct(data))
     },[])
+
+    useEffect(()=>{
+        const getId = getLocalSd();
+        for(const id in getId){
+            const addedProducts = products.find(product => product.id === id)
+            console.log(addedProducts);
+        }
+    },[])
     const cartHandler = (product) =>{
-        console.log(product);
+        // console.log(product);
         const newCart = [...cart, product]
-        setCart(newCart)
+        setCart(newCart);
+        addToDb(product.id)
     }
     return (
         <div className='product-section'>
